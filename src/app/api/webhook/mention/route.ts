@@ -7,6 +7,6 @@ export async function POST(request: NextRequest) {
     {
       message: "Received!",
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
