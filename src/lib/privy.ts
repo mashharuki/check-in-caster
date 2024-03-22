@@ -27,4 +27,17 @@ const getVerifiedClaims = async () => {
   return verifiedClaims;
 };
 
-export { getVerifiedClaims, privy };
+const getVerifiedClaimsWithoutRedirect = async () => {
+  const privyToken = cookies().get("privy-token")?.value || "";
+
+  const verifiedClaims = await privy
+    .verifyAuthToken(privyToken)
+    .then((val) => val)
+    .catch(() => {
+      return null;
+    });
+
+  return verifiedClaims;
+};
+
+export { getVerifiedClaims, getVerifiedClaimsWithoutRedirect, privy };
