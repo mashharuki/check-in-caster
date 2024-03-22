@@ -12,8 +12,9 @@ export async function middleware(req: NextRequest) {
   if (req.nextUrl.searchParams.get("privy_oauth_code"))
     return NextResponse.next();
 
-  // Bypass middleware for auth routes
-  if (requestUrl.includes("/auth/")) return NextResponse.next();
+  // Bypass middleware for signin, refresh and signout routes
+  if (requestUrl.includes("/signin") || requestUrl.includes("/auth/"))
+    return NextResponse.next();
 
   // If the user has `privy-token`, they are definitely authenticated
   const definitelyAuthenticated = Boolean(cookieAuthToken);

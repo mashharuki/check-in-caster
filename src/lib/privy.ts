@@ -11,7 +11,10 @@ if (!PRIVY_APP_SECRET) throw new Error("Missing PRIVY_APP_SECRET in env");
 const privy = new PrivyClient(PRIVY_APP_ID, PRIVY_APP_SECRET);
 
 const getVerifiedClaims = async () => {
-  const privyToken = cookies().get("privy-token")?.value || "";
+  const privyToken = cookies().get("privy-token")?.value;
+  // This condition mostly doesn't happen because the middleware handles it, if it does, middleware is not configured for the route
+  if (!privyToken) redirect("/signin");
+
   const verifiedClaims = await privy
     .verifyAuthToken(privyToken)
     .then((val) => val)
@@ -19,7 +22,7 @@ const getVerifiedClaims = async () => {
       return null;
     });
 
-  // Redirect to signout page if the token is invalid (middleware will handle if there is no privy token)
+  // Redirect to signout page if the token is invalid
   if (!verifiedClaims) redirect("/auth/signout");
   return verifiedClaims;
 };
