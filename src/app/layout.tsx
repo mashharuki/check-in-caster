@@ -1,4 +1,5 @@
 import AppLayout from "@/components/layout";
+import PrivyProvider from "@/providers/privy-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AppLayout>{children}</AppLayout>
+        <PrivyProvider>
+          <AppLayout>{children}</AppLayout>
+        </PrivyProvider>
       </body>
     </html>
   );
