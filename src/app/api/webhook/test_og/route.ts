@@ -4,7 +4,6 @@ const urlMetadata = require("url-metadata");
 export async function GET(request: NextRequest) {
   const url = "https://maps.app.goo.gl/vKad2YG4JiCxjKTt5";
   const metadata = await urlMetadata(url);
-  console.log(metadata);
 
   const locationInfo = metadata["og:title"].split(",");
   const country = locationInfo[locationInfo.length - 1].trim().toLowerCase();
