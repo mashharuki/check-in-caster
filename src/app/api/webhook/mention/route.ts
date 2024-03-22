@@ -8,12 +8,9 @@ const urlMetadata = require("url-metadata");
 
 export async function POST(request: NextRequest) {
   const data = await request.json();
-  const headersList = headers();
+  const neynarSignature = headers().get("x-neynar-signature");
 
-  if (
-    (headersList as any)["x-neynar-signature"] !==
-    process.env.NEYNAR_WEBHOOK_SIGNATURE
-  ) {
+  if (neynarSignature !== process.env.NEYNAR_WEBHOOK_SIGNATURE) {
     return NextResponse.json(
       {
         message: "Unauthorized",
