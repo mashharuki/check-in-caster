@@ -40,20 +40,20 @@ const Footer = () => {
       <ul className="flex justify-around">
         <MenuItem
           link="/"
-          icon={<HomeIcon className="h-5 w-5" />}
-          filledIcon={<HomeFilledIcon className="h-5 w-5" />}
+          icon={<HomeIcon className="h-6 w-6" />}
+          filledIcon={<HomeFilledIcon className="h-6 w-6" />}
           active={pathname === "/"}
         />
         <MenuItem
           link="/bookmarks"
-          icon={<BookmarkIcon className="h-5 w-5" />}
-          filledIcon={<BookmarkFilledIcon className="h-5 w-5" />}
+          icon={<BookmarkIcon className="h-6 w-6" />}
+          filledIcon={<BookmarkFilledIcon className="h-6 w-6" />}
           active={pathname.startsWith("/bookmarks")}
         />
         <MenuItem
           link="/profile"
-          icon={<ProfileIcon className="h-5 w-5" />}
-          filledIcon={<ProfileFilledIcon className="h-5 w-5" />}
+          icon={<ProfileIcon className="h-6 w-6" />}
+          filledIcon={<ProfileFilledIcon className="h-6 w-6" />}
           active={pathname.startsWith("/profile")}
         />
       </ul>
