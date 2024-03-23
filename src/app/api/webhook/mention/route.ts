@@ -1,16 +1,22 @@
-import { DOMAIN } from "@/config";
-import { replyCast } from "@/lib/neynar";
 import { prisma } from "@/lib/prisma";
 import { extractUrls } from "@/lib/utils";
+import { createHmac } from "crypto";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 const urlMetadata = require("url-metadata");
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
   const neynarSignature = headers().get("x-neynar-signature");
 
-  if (neynarSignature !== process.env.NEYNAR_WEBHOOK_SIGNATURE) {
+  const rawBody = await request.text();
+  const data = JSON.parse(rawBody);
+
+  const hmac = createHmac("sha512", process.env.NEYNAR_WEBHOOK_SIGNATURE!);
+  hmac.update(rawBody);
+
+  const generatedSignature = hmac.digest("hex");
+
+  if (generatedSignature !== neynarSignature) {
     return NextResponse.json(
       {
         message: "Unauthorized",
@@ -46,10 +52,10 @@ export async function POST(request: NextRequest) {
         user: {
           connectOrCreate: {
             where: {
-              fid: author.username,
+              fid: String(author.fid),
             },
             create: {
-              fid: author.fid,
+              fid: String(author.fid),
               username: author.username,
               display_name: author.display_name,
               pfp_url: author.pfp_url,
@@ -61,11 +67,10 @@ export async function POST(request: NextRequest) {
 
     if (record) {
       // Mint NFT / Send $CHECK_IN tokens
-
-      await replyCast({
-        embedUrl: `${DOMAIN}/api/checkin_frame/${record.checkin_id}`,
-        parentId: hash,
-      });
+      // await replyCast({
+      //   embedUrl: `${DOMAIN}/api/checkin_frame/${record.checkin_id}`,
+      //   parentId: hash,
+      // });
     }
   }
 
