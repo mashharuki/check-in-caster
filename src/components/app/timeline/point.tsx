@@ -65,7 +65,9 @@ const getIcon = (type?: string) => {
 
 const Point: React.FC<PointProps> = ({ initial, type }) => {
   return (
-    <div className={`timeline-point relative mx-10 ${type ? "mt-6" : "my-2"}`}>
+    <div
+      className={`timeline-point relative mx-10 h-0.5 w-0.5 ${type ? "mt-6" : "my-2"}`}
+    >
       <div
         className={`absolute left-0 top-0 z-50 min-h-3 min-w-3 -translate-x-1/2 -translate-y-1/2 rounded-full ${initial ? "bg-[#6D5FB5]" : "bg-[#ffa733]"}`}
       >

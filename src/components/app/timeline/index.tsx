@@ -32,7 +32,7 @@ const Timeline: React.FC<TimelineProps> = ({ data }) => {
   );
 
   return (
-    <div className="relative mt-1">
+    <div className="relative mt-1 overflow-y-hidden">
       {/* Trigger line render on each rerender */}
       <Line key={Math.random()} />
       {uniqueDates.map((date, dateIndex) => {
