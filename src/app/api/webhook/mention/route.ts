@@ -1,4 +1,6 @@
+import { DOMAIN } from "@/config";
 import { creditTokens } from "@/lib/contract";
+import { replyCast } from "@/lib/neynar";
 import { prisma } from "@/lib/prisma";
 import { extractUrls } from "@/lib/utils";
 import { createHmac } from "crypto";
@@ -71,11 +73,10 @@ export async function POST(request: NextRequest) {
         address: author.verified_addresses[0] ?? "",
       });
 
-      // Mint NFT / Send $CHECK_IN tokens
-      // await replyCast({
-      //   embedUrl: `${DOMAIN}/api/checkin_frame/${record.checkin_id}`,
-      //   parentId: hash,
-      // });
+      await replyCast({
+        embedUrl: `${DOMAIN}/checkin/${record.checkin_id}`,
+        parentId: hash,
+      });
     }
   }
 
