@@ -25,6 +25,7 @@ model Checkin {
     timestamp   DateTime
     parent_hash String?
     location    String?
+    coordinates Json?
     category    String?
     city        String?
     country     String?
