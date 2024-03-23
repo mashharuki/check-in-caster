@@ -69,13 +69,18 @@ export async function POST(request: NextRequest) {
     });
 
     if (record) {
-      creditTokens({
-        address: author.verified_addresses[0] ?? "",
-      });
-
       await replyCast({
         embedUrl: `${DOMAIN}checkin/${record.checkin_id}/${String(author.fid)}`,
         parentId: hash,
+      });
+
+      console.log("record");
+      console.log(author.verified_addresses);
+
+      creditTokens({
+        address: author.verified_addresses[0]
+          ? author.verified_addresses[0]?.address?.eth_addresses[0]
+          : null,
       });
     }
   }

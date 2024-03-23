@@ -2,6 +2,9 @@ import { ethers } from "ethers";
 import { tokenABI, tokenAddress, nftABI, nftAddress } from "../config/index";
 
 export const creditTokens = async ({ address }: { address: string }) => {
+  console.log("address");
+  console.log(address);
+
   if (address) {
     const CHECK_IN_TOKEN = 10;
 
