@@ -48,13 +48,13 @@ const Footer = () => {
           link="/bookmarks"
           icon={<BookmarkIcon className="h-6 w-6" />}
           filledIcon={<BookmarkFilledIcon className="h-6 w-6" />}
-          active={pathname.startsWith("/bookmarks")}
+          active={pathname?.startsWith("/bookmarks")}
         />
         <MenuItem
           link="/profile"
           icon={<ProfileIcon className="h-6 w-6" />}
           filledIcon={<ProfileFilledIcon className="h-6 w-6" />}
-          active={pathname.startsWith("/profile")}
+          active={pathname?.startsWith("/profile")}
         />
       </ul>
     </footer>

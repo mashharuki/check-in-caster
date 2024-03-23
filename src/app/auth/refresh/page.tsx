@@ -13,7 +13,7 @@ function RefreshPage() {
 
     (async () => {
       const accessToken = await getAccessToken();
-      const redirectTo = searchParams.get("redirect_to") || "/";
+      const redirectTo = searchParams?.get("redirect_to") || "/";
 
       if (accessToken) {
         window.location.replace(redirectTo);

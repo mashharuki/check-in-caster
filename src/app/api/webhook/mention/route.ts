@@ -1,5 +1,4 @@
 import { DOMAIN } from "@/config";
-import { MintNFT, creditTokens } from "@/lib/contract";
 import { getCoordinatesFromUrl } from "@/lib/helpers";
 import { replyCast } from "@/lib/neynar";
 import { prisma } from "@/lib/prisma";
@@ -84,25 +83,37 @@ export async function POST(request: NextRequest) {
         ? author.verified_addresses.eth_addresses[0]
         : null;
 
-      creditTokens({
-        address: userWalletAddress,
-      });
+      try {
+        const response = await fetch(`${DOMAIN}/api/check_airdrop`, {
+          method: "POST",
+          // @ts-ignore
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+            key: process.env.MINT_SECRET,
+          },
+          body: JSON.stringify({
+            wallet_address: userWalletAddress,
+          }),
+        });
 
-      const tokenId = await MintNFT({
-        address: userWalletAddress,
-      });
+        const { token_id } = await response.json();
 
-      if (tokenId) {
-        await prisma.metadata.create({
-          data: {
-            token_id: tokenId,
-            checkin: {
-              connect: {
-                checkin_id: record.checkin_id,
+        if (token_id) {
+          await prisma.metadata.create({
+            data: {
+              token_id: token_id,
+              checkin: {
+                connect: {
+                  checkin_id: record.checkin_id,
+                },
               },
             },
-          },
-        });
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }
