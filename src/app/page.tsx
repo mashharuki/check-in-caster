@@ -124,6 +124,8 @@ export default async function Home() {
       {feedData.map((cast) => (
         <Cast
           key={cast.parent_hash}
+          country={cast.country ?? ""}
+          category={cast.category ?? ""}
           object={""}
           hash={cast.parent_hash ?? ""}
           author={cast?.user as any}

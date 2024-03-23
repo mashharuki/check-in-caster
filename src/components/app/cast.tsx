@@ -11,6 +11,8 @@ import Embed from "./embed";
 interface CastProps {
   object: string;
   hash: string;
+  country?: string;
+  category?: string;
   author: {
     username: string;
     display_name: string;
@@ -53,6 +55,8 @@ const Cast: React.FC<CastProps> = ({
   hash,
   author,
   text,
+  country,
+  category,
   timestamp,
   embeds,
   reactions,
@@ -97,6 +101,17 @@ const Cast: React.FC<CastProps> = ({
               __html: textToHTML(text.replace("@checkin", "")),
             }}
           ></p>
+
+          <div className="flex items-center space-x-5">
+            {country ? (
+              <p className="mt-2 text-xs capitalize text-gray-500">{country}</p>
+            ) : null}
+            {category ? (
+              <p className="mt-2 text-xs capitalize text-gray-500">
+                {category}
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <div className="w-full">
