@@ -75,7 +75,7 @@ const Cast: React.FC<CastProps> = ({
   };
 
   return (
-    <div className="flex border-b bg-purple-50 bg-opacity-20 px-10 py-5">
+    <div className="flex border-b bg-purple-50 bg-opacity-20 px-5 py-5">
       <div className="pr-3">
         <Avatar className="h-14 w-14">
           <AvatarImage src={author.pfp_url} alt={`@${author.username}`} />
