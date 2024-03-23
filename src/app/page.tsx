@@ -1,3 +1,4 @@
+import Cast from "@/components/app/cast";
 import { getVerifiedClaimsWithoutRedirect, privy } from "@/lib/privy";
 
 export default async function Home() {
@@ -7,12 +8,123 @@ export default async function Home() {
     : null;
   const userFarcasterData = user?.farcaster;
 
-  console.log(userFarcasterData);
-  // TODO: If verifiedClaims is null, get generic farcaster feed else get user's farcaster feed
+  const dummyCasts = [
+    {
+      object: "cast",
+      hash: "0xd15889095cf709a55f2cddbaa392e0c8881fb138",
+      author: {
+        username: "craig_love",
+        display_name: "Martha Craig",
+        pfp_url:
+          "https://i.pinimg.com/736x/b1/da/8c/b1da8c5e24416e10707453d9908709d8.jpg",
+      },
+      text: "*East River Park*\nBrooklyn, NY\n\nIt was so relaxing, i will def go there again next year!",
+      timestamp: "2024-03-22T04:52:14.000Z",
+      embeds: [
+        {
+          url: "https://i.imgur.com/CXZzllM.png",
+        },
+      ],
+      reactions: {
+        likes: [
+          {
+            fid: 123213,
+            fname: "Kieron Dotson",
+          },
+          {
+            fid: 223123,
+            fname: "Zack John",
+          },
+        ],
+        recasts: [],
+        replies: {
+          count: 28,
+        },
+      },
+    },
+    {
+      object: "cast",
+      hash: "0xd15889095cf709a55f2cddbaa392e0c8881fb138",
+      author: {
+        username: "mis_potter",
+        display_name: "Tabitha Potter",
+        pfp_url:
+          "https://i.pinimg.com/736x/b1/da/8c/b1da8c5e24416e10707453d9908709d8.jpg",
+      },
+      text: "*East River Park*\nBrooklyn, NY",
+      timestamp: "2024-03-22T04:52:14.000Z",
+      embeds: [
+        {
+          url: "https://i.imgur.com/RLeDoO9.png",
+        },
+      ],
+      reactions: {
+        likes: [
+          {
+            fid: 123213,
+            fname: "Kieron Dotson",
+          },
+          {
+            fid: 223123,
+            fname: "Zack John",
+          },
+        ],
+        recasts: [
+          {
+            fid: 123213,
+            fname: "Kieron Dotson",
+          },
+        ],
+        replies: {
+          count: 7,
+        },
+      },
+    },
+    {
+      object: "cast",
+      hash: "0xd15889095cf709a55f2cddbaa392e0c8881fb138",
+      author: {
+        username: "karenne",
+        display_name: "karenne",
+        pfp_url:
+          "https://i.pinimg.com/736x/b1/da/8c/b1da8c5e24416e10707453d9908709d8.jpg",
+      },
+      text: "*East River Park*\nBrooklyn, NY",
+      timestamp: "2024-03-22T04:52:14.000Z",
+      embeds: [
+        {
+          url: "https://i.imgur.com/ekJLkEC.png",
+        },
+      ],
+      reactions: {
+        likes: [
+          {
+            fid: 223123,
+            fname: "Zack John",
+          },
+        ],
+        recasts: [],
+        replies: {
+          count: 8,
+        },
+      },
+    },
+  ];
 
   return (
-    <main className="flex h-full flex-col items-center justify-center">
-      Home
+    <main className="flex h-full flex-col">
+      {dummyCasts.map((cast) => (
+        <Cast
+          key={cast.hash}
+          object={cast.object}
+          hash={cast.hash}
+          author={cast.author}
+          text={cast.text}
+          timestamp={cast.timestamp}
+          embeds={cast.embeds}
+          reactions={cast.reactions}
+        />
+      ))}
     </main>
   );
 }
