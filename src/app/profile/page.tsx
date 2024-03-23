@@ -64,6 +64,8 @@ const getPoapBadges = async (fid: string) => {
 export default async function ProfilePage() {
   const verifiedClaims = await getVerifiedClaims();
   const user = await privy.getUser(verifiedClaims.userId);
+  if (!user.farcaster) redirect("/signin?redirect_to=/profile");
+
   const poapBadges = await getPoapBadges(String(user.farcaster?.fid));
 
   console.log(poapBadges);
@@ -73,8 +75,6 @@ export default async function ProfilePage() {
       fid: String(user.farcaster?.fid),
     },
   });
-
-  if (!user.farcaster) redirect("/signin?redirect_to=/profile");
 
   const checkInCount = await prisma.checkin.count({
     where: {
