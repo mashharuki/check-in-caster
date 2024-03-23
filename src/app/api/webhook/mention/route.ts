@@ -1,3 +1,4 @@
+import { creditTokens } from "@/lib/contract";
 import { prisma } from "@/lib/prisma";
 import { extractUrls } from "@/lib/utils";
 import { createHmac } from "crypto";
@@ -66,6 +67,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (record) {
+      creditTokens({
+        address: author.verified_addresses[0] ?? "",
+      });
+
       // Mint NFT / Send $CHECK_IN tokens
       // await replyCast({
       //   embedUrl: `${DOMAIN}/api/checkin_frame/${record.checkin_id}`,
