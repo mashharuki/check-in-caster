@@ -42,6 +42,7 @@ const CheckInMap: React.FC<{
           gestureHandling={"greedy"}
           disableDefaultUI={true}
           mapId={MAP_ID}
+          className="h-full w-full rounded-md rounded-b-none outline-none"
         >
           {checkedInCoordinates.map((location, index) => (
             <CheckInMarker

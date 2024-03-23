@@ -1,4 +1,5 @@
 import CheckInMap from "@/components/app/map";
+import Timeline from "@/components/app/timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { prisma } from "@/lib/prisma";
 import { getVerifiedClaims, privy } from "@/lib/privy";
@@ -92,15 +93,66 @@ export default async function ProfilePage() {
     saved: 0,
     mayors: 2,
   };
-  const userCheckIns = [
-    { lat: 35.6764, lng: 139.65, name: "Tokyo" },
-    { lat: 37.7749, lng: -122.4194, name: "San Francisco" },
-    { lat: 40.7128, lng: -74.006, name: "New York" },
-    { lat: 51.5074, lng: -0.1278, name: "London" },
-    { lat: 48.8566, lng: 2.3522, name: "Paris" },
-    { lat: 55.7558, lng: 37.6176, name: "Moscow" },
-    { lat: 19.4326, lng: -99.1332, name: "Mexico City" },
+
+  const userCheckInsData = [
+    {
+      name: "TELUS",
+      place: "Tokyo",
+      location: { lat: 35.6764, lng: 139.65 },
+      timestamp: "2023-03-20T10:00:00Z",
+      type: "work",
+    },
+    {
+      name: "Clipper Cafe",
+      place: "San Francisco",
+      location: { lat: 37.7749, lng: -122.4194 },
+      timestamp: "2023-03-21T11:00:00Z",
+      type: "lunch",
+    },
+    {
+      name: "Central Park",
+      place: "New York",
+      location: { lat: 40.7128, lng: -74.006 },
+      timestamp: "2023-03-22T12:00:00Z",
+      type: "park",
+    },
+    {
+      name: "Big Ben",
+      place: "London",
+      location: { lat: 51.5074, lng: -0.1278 },
+      timestamp: "2023-03-23T13:00:00Z",
+      type: "sightseeing",
+    },
+    {
+      name: "Eiffel Tower",
+      place: "Paris",
+      location: { lat: 48.8566, lng: 2.3522 },
+      timestamp: "2023-03-27T14:00:00Z",
+      type: "sightseeing",
+    },
+    {
+      name: "Red Square",
+      place: "Moscow",
+      location: { lat: 55.7558, lng: 37.6176 },
+      timestamp: "2023-03-25T15:00:00Z",
+      type: "sightseeing",
+    },
+    {
+      name: "Zocalo",
+      place: "Mexico City",
+      location: { lat: 19.4326, lng: -99.1332 },
+      timestamp: "2023-03-25T16:00:00Z",
+      type: "restaurant",
+    },
   ];
+
+  userCheckInsData.sort((a, b) => {
+    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+  });
+
+  const userCheckInLocations = userCheckInsData.map((checkIn) => {
+    return { ...checkIn.location, name: checkIn.place };
+  });
 
   return (
     <main className="flex h-full flex-col">
@@ -113,7 +165,7 @@ export default async function ProfilePage() {
                 <UserIcon className="h-8 w-8" />
               </AvatarFallback>
             </Avatar>
-            <div className="mt-2 font-bold">{farcasterData.displayName}</div>
+            <h1 className="mt-2 font-bold">{farcasterData.displayName}</h1>
             <div className="text-sm text-gray-500">
               @{farcasterData.username}
             </div>
@@ -133,7 +185,7 @@ export default async function ProfilePage() {
         </div>
 
         <div className="mt-14">
-          <CheckInMap checkedInCoordinates={userCheckIns} />
+          <CheckInMap checkedInCoordinates={userCheckInLocations} />
           <div>
             <div className="flex items-center justify-evenly rounded-b-md py-3 shadow">
               <BioData label="Visited" value={userStats.checkIns} smallFont />
@@ -144,6 +196,15 @@ export default async function ProfilePage() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="mt-2">
+        <div className="flex border-b border-gray-100 px-5 pb-2">
+          <h2 className="font-semibold">Check-ins</h2>{" "}
+          <div className="ml-3 text-gray-500">{userStats.checkIns}</div>
+        </div>
+
+        <Timeline data={userCheckInsData} />
       </section>
     </main>
   );
