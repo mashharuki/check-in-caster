@@ -7,8 +7,12 @@ const Line: React.FC = () => {
 
   useEffect(() => {
     const timelinePoints = document.querySelectorAll(".timeline-point");
-    const firstPoint = timelinePoints[0] as HTMLElement;
-    const lastPoint = timelinePoints[timelinePoints.length - 1] as HTMLElement;
+    const firstPoint = timelinePoints[0] as HTMLElement | null;
+    const lastPoint = timelinePoints[
+      timelinePoints.length - 1
+    ] as HTMLElement | null;
+
+    if (!firstPoint || !lastPoint) return;
 
     const height =
       lastPoint.offsetTop +
@@ -21,7 +25,7 @@ const Line: React.FC = () => {
 
   return (
     <div
-      className="absolute left-[39px] top-5 w-[2px] bg-[#ffa733]"
+      className="absolute left-[39px] top-5 w-[2px] transform bg-[#ffa733] transition-all duration-1000"
       style={{
         height: `${lineHeight}px`,
       }}

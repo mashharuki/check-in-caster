@@ -18,7 +18,7 @@ const CheckInMarker: React.FC<Location> = ({ lat, lng, name }) => {
     <AdvancedMarker position={{ lat, lng }}>
       <div className="relative h-2 w-2 rounded-full bg-black">
         <div
-          className="absolute -top-2 left-3 whitespace-nowrap p-1 text-sm"
+          className="absolute -top-2 left-3 whitespace-nowrap p-1 text-sm capitalize"
           style={{ textShadow: "1px 1px 0.5px white" }}
         >
           {name}
@@ -29,7 +29,7 @@ const CheckInMarker: React.FC<Location> = ({ lat, lng, name }) => {
 };
 
 const CheckInMap: React.FC<{
-  checkedInCoordinates: Location[];
+  checkedInCoordinates: (Partial<Location> & { name: string })[];
 }> = ({ checkedInCoordinates }) => {
   const defaultCenter = { lat: 35.6764, lng: 139.65 }; // Tokyo
 
@@ -44,14 +44,17 @@ const CheckInMap: React.FC<{
           mapId={MAP_ID}
           className="h-full w-full rounded-md rounded-b-none outline-none"
         >
-          {checkedInCoordinates.map((location, index) => (
-            <CheckInMarker
-              key={location.name + index}
-              lat={location.lat}
-              lng={location.lng}
-              name={location.name}
-            />
-          ))}
+          {checkedInCoordinates.map((location, index) => {
+            if (!location.lat || !location.lng) return null;
+            return (
+              <CheckInMarker
+                key={location.name + index}
+                lat={location.lat}
+                lng={location.lng}
+                name={location.name}
+              />
+            );
+          })}
         </Map>
       </div>
     </APIProvider>

@@ -1,6 +1,7 @@
 import CheckInMap from "@/components/app/map";
 import Timeline from "@/components/app/timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getUserInfoFromPinata } from "@/lib/helpers";
 import { prisma } from "@/lib/prisma";
 import { getVerifiedClaims, privy } from "@/lib/privy";
 import { fetchQuery, init } from "@airstack/node";
@@ -73,84 +74,58 @@ export default async function ProfilePage() {
 
   const userInfo = await prisma.user.findFirst({
     where: {
-      fid: String(user.farcaster?.fid),
+      fid: String(user.farcaster.fid),
+    },
+    include: {
+      _count: {
+        select: {
+          badges: true,
+          bookmarks: true,
+        },
+      },
     },
   });
 
-  const checkInCount = await prisma.checkin.count({
-    where: {
-      fid: userInfo?.fid,
-    },
-  });
+  const farcasterData = (
+    await getUserInfoFromPinata(String(user.farcaster.fid))
+  )?.data;
 
-  const farcasterData = user.farcaster;
+  const userCheckInsData = userInfo
+    ? await prisma.checkin.findMany({
+        where: {
+          fid: userInfo.fid,
+        },
+      })
+    : [];
+
   const userStats = {
-    checkIns: checkInCount,
-    followers: 100,
-    following: 123,
-    badges: 5,
-    checkBalance: 1000,
-    saved: 0,
-    mayors: 2,
+    checkIns: userCheckInsData.length,
+    followers: farcasterData?.follower_count || 0,
+    following: farcasterData?.following_count || 0,
+    badges: userInfo?._count.badges || 0,
+    checkBalance: 10 * userCheckInsData.length,
+    saved: userInfo?._count.bookmarks || 0,
+    mayors: userCheckInsData.length > 2 ? 2 : 0,
   };
 
-  const userCheckInsData = [
-    {
-      name: "TELUS",
-      place: "Tokyo",
-      location: { lat: 35.6764, lng: 139.65 },
-      timestamp: "2023-03-20T10:00:00Z",
-      type: "work",
-    },
-    {
-      name: "Clipper Cafe",
-      place: "San Francisco",
-      location: { lat: 37.7749, lng: -122.4194 },
-      timestamp: "2023-03-21T11:00:00Z",
-      type: "lunch",
-    },
-    {
-      name: "Central Park",
-      place: "New York",
-      location: { lat: 40.7128, lng: -74.006 },
-      timestamp: "2023-03-22T12:00:00Z",
-      type: "park",
-    },
-    {
-      name: "Big Ben",
-      place: "London",
-      location: { lat: 51.5074, lng: -0.1278 },
-      timestamp: "2023-03-23T13:00:00Z",
-      type: "sightseeing",
-    },
-    {
-      name: "Eiffel Tower",
-      place: "Paris",
-      location: { lat: 48.8566, lng: 2.3522 },
-      timestamp: "2023-03-27T14:00:00Z",
-      type: "sightseeing",
-    },
-    {
-      name: "Red Square",
-      place: "Moscow",
-      location: { lat: 55.7558, lng: 37.6176 },
-      timestamp: "2023-03-25T15:00:00Z",
-      type: "sightseeing",
-    },
-    {
-      name: "Zocalo",
-      place: "Mexico City",
-      location: { lat: 19.4326, lng: -99.1332 },
-      timestamp: "2023-03-25T16:00:00Z",
-      type: "restaurant",
-    },
-  ];
+  const checkIns = userCheckInsData.map((checkIn) => {
+    return {
+      name: checkIn.location || "",
+      place:
+        (checkIn.city
+          ? checkIn.city + ", " + checkIn.country
+          : checkIn.country) || "",
+      location: checkIn.coordinates as { lat: number; lng: number } | null,
+      timestamp: checkIn.timestamp.toISOString(),
+      type: checkIn.category || "",
+    };
+  });
 
-  userCheckInsData.sort((a, b) => {
+  checkIns.sort((a, b) => {
     return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
   });
 
-  const userCheckInLocations = userCheckInsData.map((checkIn) => {
+  const userCheckInLocations = checkIns.map((checkIn) => {
     return { ...checkIn.location, name: checkIn.place };
   });
 
@@ -160,14 +135,16 @@ export default async function ProfilePage() {
         <div className="flex justify-between">
           <div>
             <Avatar className="h-[72px] w-[72px]">
-              {farcasterData.pfp && <AvatarImage src={farcasterData.pfp} />}
+              {farcasterData?.pfp_url && (
+                <AvatarImage src={farcasterData.pfp_url} />
+              )}
               <AvatarFallback>
                 <UserIcon className="h-8 w-8" />
               </AvatarFallback>
             </Avatar>
-            <h1 className="mt-2 font-bold">{farcasterData.displayName}</h1>
+            <h1 className="mt-2 font-bold">{farcasterData?.display_name}</h1>
             <div className="text-sm text-gray-500">
-              @{farcasterData.username}
+              @{farcasterData?.username}
             </div>
           </div>
 
@@ -204,7 +181,7 @@ export default async function ProfilePage() {
           <div className="ml-3 text-gray-500">{userStats.checkIns}</div>
         </div>
 
-        <Timeline data={userCheckInsData} />
+        <Timeline data={checkIns} />
       </section>
     </main>
   );

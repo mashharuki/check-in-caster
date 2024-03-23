@@ -5,10 +5,6 @@ interface TimelineProps {
   data: {
     name: string;
     place: string;
-    location: {
-      lat: number;
-      lng: number;
-    };
     timestamp: string;
     type: string;
   }[];
@@ -54,8 +50,12 @@ const Timeline: React.FC<TimelineProps> = ({ data }) => {
                 <li key={item.name + itemIndex} className="my-10 flex">
                   <Point type={item.type} />
                   <div className="">
-                    <div className="mb-1 font-semibold">{item.name}</div>
-                    <div className="text-sm text-gray-500">{item.place}</div>
+                    <div className="mb-1 font-semibold capitalize">
+                      {item.name}
+                    </div>
+                    <div className="text-sm capitalize text-gray-500">
+                      {item.place}
+                    </div>
                     <div className="text-sm text-gray-500">
                       {getDateString(item.timestamp)}
                       {" at "}
