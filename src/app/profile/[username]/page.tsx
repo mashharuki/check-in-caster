@@ -20,16 +20,36 @@ const BioData: React.FC<{
   );
 };
 
+const getUserInfo = async (fid: string) => {
+  const options = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${process.env.PINATA_API}`,
+    },
+  };
+
+  const response = await fetch(
+    `https://api.pinata.cloud/v3/farcaster/users/${fid}`,
+    options,
+  );
+  return response.json();
+};
+
 export default async function ProfilePage({ params: { username } }: any) {
-  const userInfo = await prisma.user.findFirst({
+  const userInfo = (await getUserInfo(username)).data;
+
+  console.log(userInfo);
+
+  const farcasterData = userInfo;
+
+  const checkInCount = await prisma.checkin.count({
     where: {
-      fid: String(username),
+      fid: String(userInfo?.fid),
     },
   });
 
-  const farcasterData = userInfo;
   const userStats = {
-    checkIns: 7,
+    checkIns: checkInCount,
     followers: 100,
     following: 123,
     badges: 5,

@@ -2,6 +2,7 @@ import CheckInMap from "@/components/app/map";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { prisma } from "@/lib/prisma";
 import { getVerifiedClaims, privy } from "@/lib/privy";
+import { fetchQuery, init } from "@airstack/node";
 import { redirect } from "next/navigation";
 import { FaUser as UserIcon } from "react-icons/fa";
 
@@ -22,9 +23,50 @@ const BioData: React.FC<{
   );
 };
 
+const getPoapBadges = async (fid: string) => {
+  init(process.env.AIRSTACK_API_KEY!);
+
+  const { data, error } = await fetchQuery(
+    `query USER_POAP_COUNTRY($owner: Identity = "fc_fid:${fid}") {
+            Poaps(input: {filter: {owner: {_eq: $owner}}, blockchain: ALL}) {
+              Poap {
+                eventId 
+                poapEvent {
+                  eventName
+                  description
+                  metadata 
+                  isVirtualEvent
+                  city
+                  country
+                }
+              }
+            }
+          }`,
+  );
+
+  const poapData = [];
+
+  for (const poap of data.Poaps.Poap) {
+    if (poap.poapEvent.isVirtualEvent === false)
+      poapData.push({
+        eventId: poap.eventId,
+        eventName: poap.poapEvent.eventName,
+        description: poap.poapEvent.description,
+        image_url: poap.poapEvent.metadata.image_url,
+        country: poap.poapEvent.country,
+        city: poap.poapEvent.city,
+      });
+  }
+
+  return poapData;
+};
+
 export default async function ProfilePage() {
   const verifiedClaims = await getVerifiedClaims();
   const user = await privy.getUser(verifiedClaims.userId);
+  const poapBadges = await getPoapBadges(String(user.farcaster?.fid));
+
+  console.log(poapBadges);
 
   const userInfo = await prisma.user.findFirst({
     where: {
@@ -34,9 +76,15 @@ export default async function ProfilePage() {
 
   if (!user.farcaster) redirect("/signin?redirect_to=/profile");
 
+  const checkInCount = await prisma.checkin.count({
+    where: {
+      fid: userInfo?.fid,
+    },
+  });
+
   const farcasterData = user.farcaster;
   const userStats = {
-    checkIns: 7,
+    checkIns: checkInCount,
     followers: 100,
     following: 123,
     badges: 5,
