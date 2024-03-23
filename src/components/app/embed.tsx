@@ -6,8 +6,8 @@ const Embed: React.FC<{ url: string }> = ({ url }) => {
   //   return <img src={url} alt="embed" className="mt-3 w-full" loading="lazy" />;
   // }
 
-  // eslint-disable-next-line
   return (
+    // eslint-disable-next-line
     <img
       src={url}
       alt="embed"

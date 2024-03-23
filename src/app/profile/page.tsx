@@ -135,7 +135,7 @@ export default async function ProfilePage() {
         <div className="mt-14">
           <CheckInMap checkedInCoordinates={userCheckIns} />
           <div>
-            <div className="flex items-center justify-around rounded-b-md py-3 shadow">
+            <div className="flex items-center justify-evenly rounded-b-md py-3 shadow">
               <BioData label="Visited" value={userStats.checkIns} smallFont />
               <div className="h-7 w-0.5 bg-gray-100"></div>
               <BioData label="Saved" value={userStats.saved} smallFont />
