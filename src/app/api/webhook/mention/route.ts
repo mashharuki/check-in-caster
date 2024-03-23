@@ -1,5 +1,5 @@
 import { DOMAIN } from "@/config";
-import { creditTokens } from "@/lib/contract";
+import { MintNFT, creditTokens } from "@/lib/contract";
 import { replyCast } from "@/lib/neynar";
 import { prisma } from "@/lib/prisma";
 import { extractUrls } from "@/lib/utils";
@@ -75,13 +75,32 @@ export async function POST(request: NextRequest) {
       });
 
       console.log("record");
-      console.log(author.verified_addresses);
+      console.log(author.verified_addresses.eth_addresses[0]);
+
+      const userWalletAddress = author.verified_addresses.eth_addresses[0]
+        ? author.verified_addresses.eth_addresses[0]
+        : null;
 
       creditTokens({
-        address: author.verified_addresses[0]
-          ? author.verified_addresses[0]?.address?.eth_addresses[0]
-          : null,
+        address: userWalletAddress,
       });
+
+      const tokenId = await MintNFT({
+        address: userWalletAddress,
+      });
+
+      if (tokenId) {
+        await prisma.metadata.create({
+          data: {
+            token_id: tokenId,
+            checkin: {
+              connect: {
+                checkin_id: record.checkin_id,
+              },
+            },
+          },
+        });
+      }
     }
   }
 
