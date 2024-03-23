@@ -12,6 +12,7 @@
 # next.js
 /.next/
 /out/
+/app/api/test_og
 
 # production
 /build

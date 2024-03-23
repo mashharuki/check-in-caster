@@ -10,6 +10,7 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\""
   },
   "dependencies": {
+    "@airstack/node": "^0.0.5",
     "@prisma/client": "^5.11.0",
     "@privy-io/react-auth": "^1.59.5",
     "@privy-io/server-auth": "^1.7.2",
