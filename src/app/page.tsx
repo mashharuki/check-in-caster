@@ -1,11 +1,19 @@
 import Cast from "@/components/app/cast";
+import { prisma } from "@/lib/prisma";
 import { getVerifiedClaimsWithoutRedirect, privy } from "@/lib/privy";
 
 export default async function Home() {
+  const feedData = await prisma.checkin.findMany({
+    include: {
+      user: true,
+    },
+  });
+
   const verifiedClaims = await getVerifiedClaimsWithoutRedirect();
   const user = verifiedClaims
     ? await privy.getUser(verifiedClaims.userId)
     : null;
+
   const userFarcasterData = user?.farcaster;
 
   const dummyCasts = [
@@ -113,16 +121,30 @@ export default async function Home() {
 
   return (
     <main className="flex h-full flex-col">
-      {dummyCasts.map((cast) => (
+      {feedData.map((cast) => (
         <Cast
-          key={cast.hash}
-          object={cast.object}
-          hash={cast.hash}
-          author={cast.author}
-          text={cast.text}
-          timestamp={cast.timestamp}
-          embeds={cast.embeds}
-          reactions={cast.reactions}
+          key={cast.parent_hash}
+          object={""}
+          hash={cast.parent_hash ?? ""}
+          author={cast?.user as any}
+          text={cast.text ?? ""}
+          timestamp={String(cast.timestamp)}
+          embeds={
+            cast.image
+              ? [
+                  {
+                    url: cast.image ?? "",
+                  },
+                ]
+              : []
+          }
+          reactions={{
+            likes: [],
+            recasts: [],
+            replies: {
+              count: 10,
+            },
+          }}
         />
       ))}
     </main>

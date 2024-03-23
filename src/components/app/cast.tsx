@@ -92,7 +92,11 @@ const Cast: React.FC<CastProps> = ({
         </div>
 
         <div className="mt-3">
-          <p dangerouslySetInnerHTML={{ __html: textToHTML(text) }}></p>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: textToHTML(text.replace("@checkin", "")),
+            }}
+          ></p>
         </div>
 
         <div className="w-full">

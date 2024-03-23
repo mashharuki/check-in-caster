@@ -5019,7 +5019,7 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
 
-prop-types@^15.8.1:
+"prop-types@^0.14.9 || ^15.3.0 || ^16.0.0", prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5092,6 +5092,13 @@ randombytes@^2.1.0:
   integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
   dependencies:
     safe-buffer "^5.1.0"
+
+react-autolink-text2@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-autolink-text2/-/react-autolink-text2-3.3.0.tgz#c9361506b9a8b894435fb8e747347e401106e21c"
+  integrity sha512-ECEjdbDGZKYoGSmOoZlGHO+DRyQIvsxQLzvGnRhQwt+8p6WPjdIrFIIHFEYNgXpEaidjw1dc65tx7DDdb4QQ0A==
+  dependencies:
+    prop-types "^0.14.9 || ^15.3.0 || ^16.0.0"
 
 react-device-detect@^2.2.2:
   version "2.2.3"

@@ -3,15 +3,29 @@ import { getVerifiedClaims, privy } from "@/lib/privy";
 
 export default async function BookmarksPage() {
   const verifiedClaims = await getVerifiedClaims();
-  const user = privy.getUser(verifiedClaims.userId);
-  const checkin = await prisma.checkin.findMany({
+  const user = await privy.getUser(verifiedClaims.userId);
+
+  const bookmarks = await prisma.bookmarks.findMany({
+    where: {
+      fid: String(user.farcaster?.fid),
+    },
+    include: {
+      checkin: true,
+    },
     take: 10,
   });
 
   return (
     <main className="h-full">
       <div className="">
-        {checkin.map((record) => {
+        {bookmarks.length === 0 && (
+          <div className="flex h-full items-center justify-center">
+            <p className="text-gray-500">No bookmarks found</p>
+          </div>
+        )}
+
+        {bookmarks.map((bookmark) => {
+          const record = bookmark.checkin;
           return (
             <>
               <div

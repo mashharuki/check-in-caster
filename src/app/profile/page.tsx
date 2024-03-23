@@ -1,5 +1,6 @@
 import CheckInMap from "@/components/app/map";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { prisma } from "@/lib/prisma";
 import { getVerifiedClaims, privy } from "@/lib/privy";
 import { redirect } from "next/navigation";
 import { FaUser as UserIcon } from "react-icons/fa";
@@ -24,6 +25,12 @@ const BioData: React.FC<{
 export default async function ProfilePage() {
   const verifiedClaims = await getVerifiedClaims();
   const user = await privy.getUser(verifiedClaims.userId);
+
+  const userInfo = await prisma.user.findFirst({
+    where: {
+      fid: String(user.farcaster?.fid),
+    },
+  });
 
   if (!user.farcaster) redirect("/signin?redirect_to=/profile");
 
