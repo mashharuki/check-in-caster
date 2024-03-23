@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       });
 
       await replyCast({
-        embedUrl: `${DOMAIN}/checkin/${record.checkin_id}`,
+        embedUrl: `${DOMAIN}checkin/${record.checkin_id}/${String(author.fid)}`,
         parentId: hash,
       });
     }
