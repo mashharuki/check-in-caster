@@ -128,6 +128,7 @@ export default async function Home(props: any) {
           src={`https://checkincaster.xyz/api/images/start?cid=${checkinId}`}
         />
         <FrameButton>✅</FrameButton>
+        <FrameButton>More Reviews</FrameButton>
         <FrameButton
           action="link"
           target={`https://checkincaster.xyz/profile/${fid}`}
@@ -149,6 +150,7 @@ export default async function Home(props: any) {
         src={`https://checkincaster.xyz/api/images/start?cid=${props.params.id}`}
       />
       <FrameButton>Bookmark</FrameButton>
+      <FrameButton>More Reviews</FrameButton>
       <FrameButton
         action="link"
         target={`https://checkincaster.xyz/profile/${props.params.fid}`}
