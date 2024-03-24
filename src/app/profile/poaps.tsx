@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { getPoapBadges } from "@/lib/airstack";
 
 export default async function Poaps({ fid }: { fid: string }) {
@@ -33,3 +34,23 @@ export default async function Poaps({ fid }: { fid: string }) {
     </section>
   );
 }
+
+const PoapsLoading = (
+  <div className="mt-5 px-5">
+    <Skeleton className="h-7 w-28 rounded-full" />
+    <div className="my-10">
+      <div className="grid grid-flow-row grid-cols-2 gap-x-1 gap-y-8">
+        <div className="col-span-1 flex flex-col items-center">
+          <Skeleton className="aspect-square w-32 rounded-full" />
+          <Skeleton className="mt-3 h-5 w-32" />
+        </div>
+        <div className="col-span-1 flex flex-col items-center">
+          <Skeleton className="aspect-square w-32 rounded-full" />
+          <Skeleton className="mt-3 h-5 w-32" />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+export { PoapsLoading };

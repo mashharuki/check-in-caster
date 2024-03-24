@@ -7,7 +7,7 @@ import { getVerifiedClaims, privy } from "@/lib/privy";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { FaUser as UserIcon } from "react-icons/fa";
-import Poaps from "./poaps";
+import Poaps, { PoapsLoading } from "./poaps";
 
 const BioData: React.FC<{
   label: string;
@@ -141,7 +141,7 @@ export default async function ProfilePage() {
         <Timeline data={checkIns} />
       </section>
 
-      <Suspense>
+      <Suspense fallback={PoapsLoading}>
         <Poaps fid={String(user.farcaster.fid)} />
       </Suspense>
     </main>
