@@ -1,61 +1,71 @@
-datasource db {
-    url      = env("DATABASE_URL")
-    provider = "postgresql"
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    fid          String      @id
-    username     String?
-    display_name String?
-    pfp_url      String?
-    checkins     Checkin[]
-    bookmarks    Bookmarks[]
-    badges       Badge[]
+  fid          String      @id
+  username     String?
+  display_name String?
+  pfp_url      String?
+  badges       Badge[]
+  bookmarks    Bookmarks[]
+  checkins     Checkin[]
+  reviews      reviews[]
 }
 
 model Checkin {
-    checkin_id  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    fid         String
-    text        String?
-    embeds      Json?
-    timestamp   DateTime
-    parent_hash String?
-    location    String?
-    coordinates Json?
-    category    String?
-    city        String?
-    country     String?
-    image       String?
-    user        User        @relation(fields: [fid], references: [fid])
-    bookmarks   Bookmarks[]
-    metadata    Metadata[]
+  checkin_id  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fid         String
+  text        String?
+  embeds      Json?
+  timestamp   DateTime
+  parent_hash String?
+  location    String?
+  city        String?
+  country     String?
+  image       String?
+  category    String?
+  coordinates Json?
+  bookmarks   Bookmarks[]
+  user        User        @relation(fields: [fid], references: [fid])
+  metadata    Metadata[]
 }
 
 model Metadata {
-    metadata_id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    token_id        String
-    check_in_ref_id String  @db.Uuid
-    checkin         Checkin @relation(fields: [check_in_ref_id], references: [checkin_id])
+  metadata_id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  token_id        String
+  check_in_ref_id String  @db.Uuid
+  checkin         Checkin @relation(fields: [check_in_ref_id], references: [checkin_id])
 }
 
 model Bookmarks {
-    bookmark_id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    fid             String
-    check_in_ref_id String  @db.Uuid
-    user            User    @relation(fields: [fid], references: [fid])
-    checkin         Checkin @relation(fields: [check_in_ref_id], references: [checkin_id])
+  bookmark_id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fid             String
+  check_in_ref_id String  @db.Uuid
+  checkin         Checkin @relation(fields: [check_in_ref_id], references: [checkin_id])
+  user            User    @relation(fields: [fid], references: [fid])
 }
 
 model Badge {
-    badge_id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    fid              String
-    name             String?
-    image            String?
-    contract_address String?
-    tx_hash          String?
-    user             User    @relation(fields: [fid], references: [fid])
+  badge_id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fid              String
+  name             String?
+  image            String?
+  contract_address String?
+  tx_hash          String?
+  user             User    @relation(fields: [fid], references: [fid])
+}
+
+model reviews {
+  review_id String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  rating    Float
+  comment   String?
+  fid       String
+  by        String?
+  User      User    @relation(fields: [fid], references: [fid])
 }
