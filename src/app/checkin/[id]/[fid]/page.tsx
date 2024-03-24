@@ -65,14 +65,7 @@ export default async function Home(props) {
               Error with Bookmark ops
             </div>
           </FrameImage>
-          <FrameButton>✅</FrameButton>
-          <FrameButton>More Reviews</FrameButton>
-          <FrameButton
-            action="link"
-            target={`https://checkincaster.xyz/profile/${fid}`}
-          >
-            Profile
-          </FrameButton>
+          <FrameButton>Invalid Request</FrameButton>
         </FrameContainer>
       );
     }
@@ -85,10 +78,9 @@ export default async function Home(props) {
         pathname="/checkin/[id]/[fid]"
       >
         <FrameImage
-          src={`https://checkin-frame.vercel.app/api/images/start?cid=${checkinId}`}
+          src={`https://checkincaster.xyz/api/images/start?cid=${checkinId}`}
         />
         <FrameButton>✅</FrameButton>
-        <FrameButton>More Reviews</FrameButton>
         <FrameButton
           action="link"
           target={`https://checkincaster.xyz/profile/${fid}`}
@@ -107,10 +99,9 @@ export default async function Home(props) {
       pathname="/checkin/[id]/[fid]"
     >
       <FrameImage
-        src={`https://checkin-frame.vercel.app/api/images/start?cid=${props.params.id}`}
+        src={`https://checkincaster.xyz/api/images/start?cid=${props.params.id}`}
       />
       <FrameButton>Bookmark</FrameButton>
-      <FrameButton>More Reviews</FrameButton>
       <FrameButton
         action="link"
         target={`https://checkincaster.xyz/profile/${props.params.fid}`}
