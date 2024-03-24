@@ -39,9 +39,14 @@ export default async function ProfilePage() {
       _count: {
         select: {
           badges: true,
-          bookmarks: true,
         },
       },
+    },
+  });
+
+  const bookmarksCount = await prisma.bookmarks.count({
+    where: {
+      fid: String(user.farcaster.fid),
     },
   });
 
@@ -61,7 +66,7 @@ export default async function ProfilePage() {
     following: farcasterData?.following_count || 0,
     badges: userInfo?._count.badges || 0,
     checkBalance: 10 * userCheckInsData.length,
-    saved: userInfo?._count.bookmarks || 0,
+    saved: bookmarksCount,
     mayors: userCheckInsData.length > 2 ? 2 : 0,
   };
 
