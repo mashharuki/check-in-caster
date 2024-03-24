@@ -49,7 +49,7 @@ const Timeline: React.FC<TimelineProps> = ({ data }) => {
               {filteredData.map((item, itemIndex) => (
                 <li key={item.name + itemIndex} className="my-10 flex">
                   <Point type={item.type} />
-                  <div className="">
+                  <div className="pr-5">
                     <div className="mb-1 font-semibold capitalize">
                       {item.name}
                     </div>
