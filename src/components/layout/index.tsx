@@ -1,3 +1,4 @@
+import { Toaster } from "../ui/sonner";
 import Footer from "./footer";
 import Header from "./header";
 
@@ -10,6 +11,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {children}
       </div>
       <Footer />
+      <Toaster position="top-center" />
     </div>
   );
 };

@@ -1,5 +1,4 @@
-//@ts-nocheck
-import { prisma } from "@/app/lib/db";
+import { prisma } from "@/lib/prisma";
 import {
   FrameButton,
   FrameContainer,
@@ -9,9 +8,10 @@ import {
   useFramesReducer,
 } from "frames.js/next/server";
 
+// @ts-ignore
 const reducer = (state, action) => ({ count: state.count + 1 });
 
-export default async function Home(props) {
+export default async function Home(props: any) {
   const previousFrame = getPreviousFrame(props.searchParams);
   const frameMessage = await getFrameMessage(previousFrame.postBody, {
     fetchHubContext: false,

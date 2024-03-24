@@ -21,7 +21,7 @@ function SignInPage() {
   useEffect(() => {
     if (!user) return;
 
-    const redirectTo = searchParams.get("redirect_to");
+    const redirectTo = searchParams?.get("redirect_to");
     let timeout: NodeJS.Timeout;
     if (redirectTo) {
       setShowRedirectMessage(true);

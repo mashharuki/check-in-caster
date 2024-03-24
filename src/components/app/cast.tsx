@@ -71,13 +71,17 @@ const Cast: React.FC<CastProps> = ({
       .replace(/\n/g, "<br>")
       .replace(/\*(.*?)\*/g, `<b class="text-lg">$1</b>`)
       .replace(/_(.*?)_/g, "<i>$1</i>")
-      .replace(/`(.*?)`/g, "<code>$1</code>");
+      .replace(/`(.*?)`/g, "<code>$1</code>")
+      .replace(
+        /((?:https?:\/\/|www\.)[^\s]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer" class="underline">$1</a>',
+      );
   };
 
   return (
-    <div className="flex border-b bg-purple-50 bg-opacity-20 px-5 py-5">
-      <div className="pr-3">
-        <Avatar className="h-14 w-14">
+    <div className="grid grid-flow-row grid-cols-12 border-b bg-purple-50 bg-opacity-20 px-5 py-5">
+      <div className="col-span-2 pr-3">
+        <Avatar className="h-auto w-full">
           <AvatarImage src={author.pfp_url} alt={`@${author.username}`} />
           <AvatarFallback>
             <UserIcon />
@@ -85,7 +89,7 @@ const Cast: React.FC<CastProps> = ({
         </Avatar>
       </div>
 
-      <div>
+      <div className="col-span-10">
         <div>
           <span className="font-semibold">{author.display_name}</span>{" "}
           <span className="text-gray-500">@{author.username}</span>
@@ -100,9 +104,10 @@ const Cast: React.FC<CastProps> = ({
             dangerouslySetInnerHTML={{
               __html: textToHTML(text.replace("@checkin", "")),
             }}
+            className="break-words"
           ></p>
 
-          <div className="flex items-center space-x-5">
+          <div className="mt-2 flex items-center space-x-5">
             {country ? (
               <p className="mt-2 text-xs capitalize text-gray-500">{country}</p>
             ) : null}
@@ -120,7 +125,7 @@ const Cast: React.FC<CastProps> = ({
           ))}
         </div>
 
-        <ul className="mt-5 flex justify-between px-5 text-[#687684]">
+        <ul className="mt-5 flex justify-between px-4 text-[#687684]">
           <CastBtns
             icon={<ReplyIcon />}
             text={reactions.replies.count.toString()}

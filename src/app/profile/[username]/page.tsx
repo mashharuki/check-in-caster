@@ -1,5 +1,6 @@
 import CheckInMap from "@/components/app/map";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getUserInfo } from "@/lib/pinata";
 import { prisma } from "@/lib/prisma";
 import { FaUser as UserIcon } from "react-icons/fa";
 
@@ -21,22 +22,24 @@ const BioData: React.FC<{
 };
 
 export default async function ProfilePage({ params: { username } }: any) {
-  const userInfo = await prisma.user.findFirst({
+  const farcasterData = (await getUserInfo(username))?.data;
+
+  const checkInCount = await prisma.checkin.count({
     where: {
-      fid: String(username),
+      fid: username,
     },
   });
 
-  const farcasterData = userInfo;
   const userStats = {
-    checkIns: 7,
-    followers: 100,
-    following: 123,
+    checkIns: checkInCount,
+    followers: farcasterData?.follower_count || 0,
+    following: farcasterData?.following_count || 0,
     badges: 5,
-    checkBalance: 1000,
-    saved: 0,
+    checkBalance: 10 * checkInCount,
+    saved: 1,
     mayors: 2,
   };
+
   const userCheckIns = [
     { lat: 35.6764, lng: 139.65, name: "Tokyo" },
     { lat: 37.7749, lng: -122.4194, name: "San Francisco" },
@@ -82,7 +85,7 @@ export default async function ProfilePage({ params: { username } }: any) {
         <div className="mt-14">
           <CheckInMap checkedInCoordinates={userCheckIns} />
           <div>
-            <div className="flex items-center justify-around rounded-b-md py-3 shadow">
+            <div className="flex items-center justify-evenly rounded-b-md py-3 shadow">
               <BioData label="Visited" value={userStats.checkIns} smallFont />
               <div className="h-7 w-0.5 bg-gray-100"></div>
               <BioData label="Saved" value={userStats.saved} smallFont />

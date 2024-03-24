@@ -1,5 +1,5 @@
 import { DOMAIN } from "@/config";
-import { creditTokens } from "@/lib/contract";
+import { getCoordinatesFromResolvedUrl } from "@/lib/helpers";
 import { replyCast } from "@/lib/neynar";
 import { prisma } from "@/lib/prisma";
 import { extractUrls } from "@/lib/utils";
@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
 
   if (mapUrl) {
     const metadata = await urlMetadata(mapUrl);
+    const coordinates = getCoordinatesFromResolvedUrl(metadata.url);
 
     const locationInfo = metadata["og:title"].split(",");
     const country = locationInfo[locationInfo.length - 1].trim().toLowerCase();
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
         timestamp,
         embeds,
         location: metadata["og:title"],
+        coordinates,
         country,
         image: metadata["og:image"],
         category: metadata["og:description"].split(" · ")?.[1],
@@ -69,14 +71,50 @@ export async function POST(request: NextRequest) {
     });
 
     if (record) {
-      creditTokens({
-        address: author.verified_addresses[0] ?? "",
-      });
-
       await replyCast({
-        embedUrl: `${DOMAIN}/checkin/${record.checkin_id}`,
+        embedUrl: `${DOMAIN}checkin/${record.checkin_id}/${String(author.fid)}`,
         parentId: hash,
       });
+
+      console.log("record");
+      console.log(author.verified_addresses.eth_addresses[0]);
+
+      const userWalletAddress = author.verified_addresses.eth_addresses[0]
+        ? author.verified_addresses.eth_addresses[0]
+        : null;
+
+      try {
+        const response = await fetch(`${DOMAIN}/api/check_airdrop`, {
+          method: "POST",
+          // @ts-ignore
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+            key: process.env.MINT_SECRET,
+          },
+          body: JSON.stringify({
+            wallet_address: userWalletAddress,
+          }),
+        });
+
+        const { token_id } = await response.json();
+
+        if (token_id) {
+          await prisma.metadata.create({
+            data: {
+              token_id: token_id,
+              checkin: {
+                connect: {
+                  checkin_id: record.checkin_id,
+                },
+              },
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import { getCoordinatesFromResolvedUrl } from "@/lib/helpers";
 import { NextRequest, NextResponse } from "next/server";
 const urlMetadata = require("url-metadata");
 
@@ -7,9 +8,11 @@ export async function GET(request: NextRequest) {
 
   const locationInfo = metadata["og:title"].split(",");
   const country = locationInfo[locationInfo.length - 1].trim().toLowerCase();
+  const coordinates = await getCoordinatesFromResolvedUrl(metadata.url);
 
   return NextResponse.json(
     {
+      coordinates,
       title: metadata["og:title"],
       country: country,
       category: metadata["og:description"].split(" · ")?.[1],

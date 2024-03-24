@@ -25,12 +25,21 @@ model Checkin {
     timestamp   DateTime
     parent_hash String?
     location    String?
+    coordinates Json?
     category    String?
     city        String?
     country     String?
     image       String?
     user        User        @relation(fields: [fid], references: [fid])
     bookmarks   Bookmarks[]
+    metadata    Metadata[]
+}
+
+model Metadata {
+    metadata_id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    token_id        String
+    check_in_ref_id String  @db.Uuid
+    checkin         Checkin @relation(fields: [check_in_ref_id], references: [checkin_id])
 }
 
 model Bookmarks {
