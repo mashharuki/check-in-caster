@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getVerifiedClaims, privy } from "@/lib/privy";
+import countries from "i18n-iso-countries";
 import { redirect } from "next/navigation";
 
 export default async function BookmarksPage() {
@@ -16,6 +17,10 @@ export default async function BookmarksPage() {
     },
     take: 10,
   });
+
+  const getCountryCode = (country: string | null) => {
+    return countries.getAlpha2Code(country || "", "en")?.toLowerCase() || "jp";
+  };
 
   return (
     <main className="h-full">
@@ -48,12 +53,13 @@ export default async function BookmarksPage() {
                     <p className="mt-2 flex items-center space-x-5 text-sm capitalize  text-gray-600">
                       {/* eslint-disable-next-line */}
                       <img
-                        src="https://flagcdn.com/112x84/jp.png"
+                        src={`https://flagcdn.com/112x84/${getCountryCode(record.country)}.png`}
                         width={20}
                         height={20}
                         className="mr-2"
                         loading="lazy"
                       />
+
                       {record.country}
                     </p>
                   </div>

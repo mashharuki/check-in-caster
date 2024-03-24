@@ -1,3 +1,4 @@
+import { BiSolidCameraMovie as MovieIcon } from "react-icons/bi";
 import {
   FaUmbrellaBeach as BeachIcon,
   FaMapMarkerAlt as MarkerIcon,
@@ -70,6 +71,8 @@ const getIcon = (type?: string) => {
     ])
   )
     icon = <SportsIcon className="h-5 w-5" />;
+  else if (includesAny(type, ["movie", "cinema", "film", "theater"]))
+    icon = <MovieIcon className="h-5 w-5" />;
 
   return (
     <div className="flex items-center justify-center p-4 text-white">
