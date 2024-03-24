@@ -19,25 +19,27 @@ export async function GET(req: NextRequest) {
   return new ImageResponse(
     (
       <div tw="flex flex-row bg-black w-full h-full text-white relative">
-        <img src={image} tw="h-full w-1/2" />
+        <img src={image} tw="h-full w-1/2" width={500} height={700} />
         <div tw="w-1/2 flex flex-col justify-between p-10 py-8">
           <div tw="flex flex-col">
             <div tw="flex items-center">
               <img
                 src={userData?.profileImage}
-                tw="w-7 h-7 mr-3 rounded-full"
+                width={10}
+                height={10}
+                tw="w-12 h-12 mr-3 rounded-full"
               />
-              <h2 tw="text-sm">{userData?.displayName}</h2>
+              <h2 tw="text-2xl">{userData?.displayName}</h2>
             </div>
-            <h1 tw="mt-1">Checked in {category}!</h1>
-            <p tw="pr-20 -mt-1 text-lg">
+            <h1 tw="mt-1 py-5 text-5xl">Checked in {category}!</h1>
+            <p tw="pr-20 -mt-1 text-2xl">
               {text
                 .replace("@checkin", "")
                 .replace(/(?:https?|ftp):\/\/[\n\S]+/g, "")}
             </p>
           </div>
           <div tw="flex flex-col">
-            <h3>Rating</h3>
+            <h3 tw="text-xl">Rating</h3>
             <div tw="-mt-3 flex flex-row justify-between w-2/6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -54,6 +56,7 @@ export async function GET(req: NextRequest) {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="yellow"
+                s
               >
                 <path
                   fill-rule="evenodd"

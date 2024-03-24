@@ -20,8 +20,7 @@ export async function GET(req: NextRequest) {
   });
 
   try {
-    const r1 = reviews[Math.floor(Math.random() * 16)];
-    const r2 = reviews[Math.floor(Math.random() * 16)];
+    const { by, rating, comment } = reviews[Math.floor(Math.random() * 16)];
 
     return new ImageResponse(
       (
@@ -30,25 +29,18 @@ export async function GET(req: NextRequest) {
           <div tw="w-1/2 flex flex-col justify-between p-10 py-8">
             <div tw="flex flex-col">
               <div tw="flex items-center mb-5">
-                <h2 tw="text-xl">Reviews</h2>
+                <h2 tw="text-2xl">Reviews</h2>
               </div>
               <div tw="flex flex-col">
                 <div tw="flex items-center justify-between text-md">
-                  <h5 tw="r-2">{r1.by}</h5>
-                  <h5>{r1.rating} ⭐️</h5>
+                  <h5 tw="r-2 text-xl">{by}</h5>
+                  <h5 tw="text-xl">{rating} ⭐️</h5>
                 </div>
-                <p tw="-mt-4">{r1.comment}</p>
-              </div>
-              <div tw="flex flex-col">
-                <div tw="flex items-center justify-between text-md">
-                  <h5 tw="r-2">{r2.by}</h5>
-                  <h5>{r2.rating} ⭐️</h5>
-                </div>
-                <p tw="-mt-4">{r2.comment}</p>
+                <p tw="-mt-4 text-3xl">{comment}</p>
               </div>
             </div>
             <div tw="flex flex-col">
-              <h3>Rating</h3>
+              <h3 tw="text-xl">Rating</h3>
               <div tw="-mt-3 flex flex-row justify-between w-2/6">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
