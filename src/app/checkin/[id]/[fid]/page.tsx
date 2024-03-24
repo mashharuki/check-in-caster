@@ -44,7 +44,7 @@ export default async function Home(props: any) {
           pathname="/checkin/[id]/[fid]"
         >
           <FrameImage
-            src={`https://checkin-frame.vercel.app/api/images/reviews?cid=${checkinId}`}
+            src={`https://checkincaster.xyz/api/images/reviews?cid=${checkinId}`}
           />
           <FrameButton>✅</FrameButton>
           <FrameButton>More Reviews</FrameButton>
