@@ -1,3 +1,4 @@
+import { getUserInfo } from "@/lib/pinata";
 import { prisma } from "@/lib/prisma";
 import {
   FrameButton,
@@ -44,10 +45,30 @@ export default async function Home(props: any) {
       });
 
       if (!bookmark) {
+        const requesterFarcasterData = await getUserInfo(
+          frameMessage.requesterFid.toString(),
+        );
+
         await prisma.bookmarks.create({
           data: {
-            fid: frameMessage.requesterFid.toString(),
-            check_in_ref_id: checkinId,
+            checkin: {
+              connect: {
+                checkin_id: checkinId,
+              },
+            },
+            user: {
+              connectOrCreate: {
+                where: {
+                  fid: String(requesterFarcasterData?.data.fid),
+                },
+                create: {
+                  fid: String(requesterFarcasterData?.data.fid),
+                  username: requesterFarcasterData?.data.username,
+                  display_name: requesterFarcasterData?.data.display_name,
+                  pfp_url: requesterFarcasterData?.data.pfp_url,
+                },
+              },
+            },
           },
         });
       }
