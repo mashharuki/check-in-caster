@@ -37,7 +37,7 @@ export default async function BookmarksPage() {
             <>
               <div
                 key={record.checkin_id}
-                className="relative grid grid-cols-3 place-items-center gap-5 border-b px-3 pb-4 pt-2 hover:bg-gray-50"
+                className="relative grid grid-cols-3 place-items-center gap-5 border-b px-3 py-4 hover:bg-gray-50"
               >
                 {/* eslint-disable-next-line */}
                 <img
