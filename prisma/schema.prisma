@@ -8,12 +8,11 @@ datasource db {
 }
 
 model User {
-  fid          String      @id
+  fid          String    @id
   username     String?
   display_name String?
   pfp_url      String?
   badges       Badge[]
-  bookmarks    Bookmarks[]
   checkins     Checkin[]
   reviews      reviews[]
 }
@@ -48,7 +47,6 @@ model Bookmarks {
   fid             String
   check_in_ref_id String  @db.Uuid
   checkin         Checkin @relation(fields: [check_in_ref_id], references: [checkin_id])
-  user            User    @relation(fields: [fid], references: [fid])
 }
 
 model Badge {
