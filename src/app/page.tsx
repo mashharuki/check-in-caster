@@ -1,8 +1,10 @@
 import Cast from "@/components/app/cast";
+import HomeLoading from "@/components/layout/home-loading";
 import { prisma } from "@/lib/prisma";
 import { getVerifiedClaimsWithoutRedirect, privy } from "@/lib/privy";
+import { Suspense } from "react";
 
-export default async function Home() {
+async function Home() {
   const feedData = await prisma.checkin.findMany({
     include: {
       user: true,
@@ -50,5 +52,13 @@ export default async function Home() {
         />
       ))}
     </main>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={HomeLoading}>
+      <Home />
+    </Suspense>
   );
 }
