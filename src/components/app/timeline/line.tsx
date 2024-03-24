@@ -30,7 +30,7 @@ const Line: React.FC = () => {
 
   return (
     <div
-      className="absolute left-[39px] top-5 w-[2px] transform bg-[#ffa733] transition-all duration-1000"
+      className="absolute left-[39px] top-5 w-[2px] transform bg-[#6D5FB5] transition-all duration-1000"
       style={{
         height: `${lineHeight}px`,
       }}

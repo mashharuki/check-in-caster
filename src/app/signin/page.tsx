@@ -48,7 +48,7 @@ function SignInPage() {
       />
 
       <div className="flex flex-col items-center">
-        {showAuthAlert && (
+        {user && showAuthAlert && (
           <div className="mx-10 mb-10 rounded border border-red-600 px-3 py-3 text-sm text-red-600">
             Sorry, it seems you don&apos;t have a Farcaster account. Please
             login with Farcaster or{" "}
@@ -64,7 +64,7 @@ function SignInPage() {
           </div>
         )}
 
-        {showRedirectMessage && (
+        {user && showRedirectMessage && (
           <div className="mx-10 mb-10 px-3 py-3 text-sm text-gray-500">
             Logged in! Redirecting in 3 seconds...
           </div>

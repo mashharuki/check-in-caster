@@ -5,7 +5,10 @@ import {
 } from "react-icons/fa";
 import { FaBagShopping as ShoppingIcon } from "react-icons/fa6";
 import { ImSpoonKnife as FoodIcon } from "react-icons/im";
-import { MdTempleBuddhist as TempleIcon } from "react-icons/md";
+import {
+  MdSportsCricket as SportsIcon,
+  MdTempleBuddhist as TempleIcon,
+} from "react-icons/md";
 import { PiBinocularsFill as SightSeeingIcon } from "react-icons/pi";
 
 interface PointProps {
@@ -55,6 +58,18 @@ const getIcon = (type?: string) => {
     icon = <BeachIcon className="h-5 w-5" />;
   else if (includesAny(type, ["shop", "store", "mall", "market", "buy"]))
     icon = <ShoppingIcon className="h-5 w-5" />;
+  else if (
+    includesAny(type, [
+      "sports",
+      "game",
+      "match",
+      "play",
+      "watch",
+      "field",
+      "ground",
+    ])
+  )
+    icon = <SportsIcon className="h-5 w-5" />;
 
   return (
     <div className="flex items-center justify-center p-4 text-white">
@@ -63,13 +78,13 @@ const getIcon = (type?: string) => {
   );
 };
 
-const Point: React.FC<PointProps> = ({ initial, type }) => {
+const Point: React.FC<PointProps> = ({ type }) => {
   return (
     <div
       className={`timeline-point relative mx-10 h-0.5 w-0.5 ${type ? "mt-6" : "my-2"}`}
     >
       <div
-        className={`absolute left-0 top-0 z-50 min-h-3 min-w-3 -translate-x-1/2 -translate-y-1/2 rounded-full ${initial ? "bg-[#6D5FB5]" : "bg-[#ffa733]"}`}
+        className={`absolute left-0 top-0 z-50 min-h-3 min-w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6D5FB5]`}
       >
         {getIcon(type)}
       </div>
