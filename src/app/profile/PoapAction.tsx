@@ -5,7 +5,13 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const PoapAction = ({ poap }: { poap: any }) => {
+const PoapAction = ({
+  poap,
+  hideBorder,
+}: {
+  poap: any;
+  hideBorder?: boolean;
+}) => {
   const [checkedIn, setCheckedIn] = useState(false);
   const [hide, setHide] = useState(false);
 
@@ -14,22 +20,24 @@ const PoapAction = ({ poap }: { poap: any }) => {
   return (
     <div
       key={poap.eventId}
-      className="place-items-left grid grid-cols-4 border-b  px-4 pb-4 text-left"
+      className={`grid grid-cols-4 px-4 pb-4 text-left ${hideBorder ? "" : "border-b border-gray-100"}`}
     >
       {/* eslint-disable-next-line  */}
       <img
         src={poap.image_url}
         alt={poap.eventName}
-        className="w-18 aspect-square rounded-full object-cover"
+        className="w-18 col-span-1 aspect-square rounded-full object-cover"
         loading="lazy"
       />
 
       <div className="col-span-3 place-content-start text-left">
-        <h3 className="mt-3 line-clamp-2 text-ellipsis px-3  text-sm font-semibold">
-          <span className="mr-5">{poap.city}</span>
-          {poap.country}
-        </h3>
-        <p className="mt-3 line-clamp-2 text-ellipsis px-3  text-sm  text-gray-500">
+        {poap.city || poap.country ? (
+          <div className="mt-3 line-clamp-2 text-ellipsis px-5 text-sm font-semibold">
+            {poap.city ? poap.city + ", " : ""}
+            {poap.country}
+          </div>
+        ) : null}
+        <p className="mt-3 line-clamp-2 text-ellipsis px-5 text-sm text-gray-500">
           {poap.eventName}
         </p>
 
