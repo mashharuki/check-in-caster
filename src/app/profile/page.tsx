@@ -1,5 +1,6 @@
 import CheckInMap from "@/components/app/map";
 import Timeline from "@/components/app/timeline";
+import { PrivyLogoutBtn } from "@/components/privy";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUserInfo } from "@/lib/pinata";
 import { prisma } from "@/lib/prisma";
@@ -149,6 +150,13 @@ export default async function ProfilePage() {
       <Suspense fallback={PoapsLoading}>
         <Poaps fid={String(user.farcaster.fid)} />
       </Suspense>
+
+      <div className="px-12 pb-10">
+        <PrivyLogoutBtn
+          className="w-full bg-red-500 px-6 py-3 hover:bg-red-700"
+          redirectToHome
+        />
+      </div>
     </main>
   );
 }
