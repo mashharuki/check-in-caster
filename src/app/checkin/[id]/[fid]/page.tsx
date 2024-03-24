@@ -22,8 +22,7 @@ export default async function Home(props: any) {
 
   console.log(props);
 
-  //create bookmark
-  if (frameMessage?.buttonIndex === 1) {
+  if (frameMessage) {
     const checkinId = JSON.parse(
       props.searchParams.postBody,
     ).untrustedData.url.split("/")[4];
@@ -35,60 +34,87 @@ export default async function Home(props: any) {
     console.log(checkinId, fid);
     console.log(JSON.parse(props.searchParams.postBody).untrustedData.url);
 
-    try {
-      //check if it exists in the database first
-      const bookmark = await prisma.bookmarks.findFirst({
-        where: {
-          fid: frameMessage.requesterFid.toString(),
-          check_in_ref_id: checkinId,
-        },
-      });
-
-      if (!bookmark) {
-        const requesterFarcasterData = await getUserInfo(
-          frameMessage.requesterFid.toString(),
-        );
-
-        await prisma.bookmarks.create({
-          data: {
-            checkin: {
-              connect: {
-                checkin_id: checkinId,
-              },
-            },
-            user: {
-              connectOrCreate: {
-                where: {
-                  fid: String(requesterFarcasterData?.data.fid),
-                },
-                create: {
-                  fid: String(requesterFarcasterData?.data.fid),
-                  username: requesterFarcasterData?.data.username,
-                  display_name: requesterFarcasterData?.data.display_name,
-                  pfp_url: requesterFarcasterData?.data.pfp_url,
-                },
-              },
-            },
-          },
-        });
-      }
-    } catch (error) {
-      console.log(error);
+    //send more reviews
+    if (frameMessage?.buttonIndex === 2) {
       return (
         <FrameContainer
           postUrl="/api/frames"
           state={state}
           previousFrame={previousFrame}
-          pathname="/checkin/[id]"
+          pathname="/checkin/[id]/[fid]"
         >
-          <FrameImage>
-            <div tw="flex justify-center items-center">
-              Error with Bookmark ops
-            </div>
-          </FrameImage>
-          <FrameButton>Invalid Request</FrameButton>
+          <FrameImage
+            src={`https://checkin-frame.vercel.app/api/images/reviews?cid=${checkinId}`}
+          />
+          <FrameButton>✅</FrameButton>
+          <FrameButton>More Reviews</FrameButton>
+          <FrameButton
+            action="link"
+            target={`https://checkincaster.xyz/profile/${fid}`}
+          >
+            Profile
+          </FrameButton>
         </FrameContainer>
       );
+    }
+
+    //create bookmark
+    if (frameMessage?.buttonIndex === 1) {
+      try {
+        //check if it exists in the database first
+        const bookmark = await prisma.bookmarks.findFirst({
+          where: {
+            fid: frameMessage.requesterFid.toString(),
+            check_in_ref_id: checkinId,
+          },
+        });
+
+        if (!bookmark) {
+          const requesterFarcasterData = await getUserInfo(
+            frameMessage.requesterFid.toString(),
+          );
+
+          await prisma.bookmarks.create({
+            data: {
+              checkin: {
+                connect: {
+                  checkin_id: checkinId,
+                },
+              },
+              user: {
+                connectOrCreate: {
+                  where: {
+                    fid: String(requesterFarcasterData?.data.fid),
+                  },
+                  create: {
+                    fid: String(requesterFarcasterData?.data.fid),
+                    username: requesterFarcasterData?.data.username,
+                    display_name: requesterFarcasterData?.data.display_name,
+                    pfp_url: requesterFarcasterData?.data.pfp_url,
+                  },
+                },
+              },
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        return (
+          <FrameContainer
+            postUrl="/api/frames"
+            state={state}
+            previousFrame={previousFrame}
+            pathname="/checkin/[id]"
+          >
+            <FrameImage>
+              <div tw="flex justify-center items-center">
+                Error with Bookmark ops
+              </div>
+            </FrameImage>
+            <FrameButton>Invalid Request</FrameButton>
+          </FrameContainer>
+        );
+      }
     }
 
     return (
