@@ -1,5 +1,5 @@
 import { DOMAIN } from "@/config";
-import { getCoordinatesFromUrl } from "@/lib/helpers";
+import { getCoordinatesFromResolvedUrl } from "@/lib/helpers";
 import { replyCast } from "@/lib/neynar";
 import { prisma } from "@/lib/prisma";
 import { extractUrls } from "@/lib/utils";
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   if (mapUrl) {
     const metadata = await urlMetadata(mapUrl);
-    const coordinates = await getCoordinatesFromUrl(mapUrl);
+    const coordinates = getCoordinatesFromResolvedUrl(metadata.url);
 
     const locationInfo = metadata["og:title"].split(",");
     const country = locationInfo[locationInfo.length - 1].trim().toLowerCase();
