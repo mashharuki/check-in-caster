@@ -1,7 +1,7 @@
 import CheckInMap from "@/components/app/map";
 import Timeline from "@/components/app/timeline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getUserInfoFromPinata } from "@/lib/helpers";
+import { getUserInfo } from "@/lib/pinata";
 import { prisma } from "@/lib/prisma";
 import { getVerifiedClaims, privy } from "@/lib/privy";
 import { redirect } from "next/navigation";
@@ -45,9 +45,7 @@ export default async function ProfilePage() {
     },
   });
 
-  const farcasterData = (
-    await getUserInfoFromPinata(String(user.farcaster.fid))
-  )?.data;
+  const farcasterData = (await getUserInfo(String(user.farcaster.fid)))?.data;
 
   const userCheckInsData = userInfo
     ? await prisma.checkin.findMany({

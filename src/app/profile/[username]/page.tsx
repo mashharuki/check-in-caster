@@ -1,6 +1,6 @@
 import CheckInMap from "@/components/app/map";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getUserInfoFromPinata } from "@/lib/helpers";
+import { getUserInfo } from "@/lib/pinata";
 import { prisma } from "@/lib/prisma";
 import { FaUser as UserIcon } from "react-icons/fa";
 
@@ -22,7 +22,7 @@ const BioData: React.FC<{
 };
 
 export default async function ProfilePage({ params: { username } }: any) {
-  const userInfo = (await getUserInfoFromPinata(username))?.data;
+  const userInfo = (await getUserInfo(username))?.data;
 
   console.log(userInfo);
 

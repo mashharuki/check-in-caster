@@ -1,7 +1,7 @@
-import { getPoapBadgesFromAirstack } from "@/lib/helpers";
+import { getPoapBadges } from "@/lib/airstack";
 
 export default async function Poaps({ fid }: { fid: string }) {
-  const poapBadges = await getPoapBadgesFromAirstack(fid);
+  const poapBadges = await getPoapBadges(fid);
 
   return (
     <section className="mt-5">
